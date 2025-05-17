@@ -2,7 +2,6 @@
 Footer START -->
 <footer class="bg-dark pt-0 pt-md-0 position-relative" data-bs-theme="dark">
     <div class="container">
-        
 
         <!-- Divider -->
         <hr class="mt-xl-5 mb-0 opacity-1">
@@ -15,7 +14,7 @@ Footer START -->
             <!-- Policy link -->
             <ul class="nav d-flex justify-content-center gap-1 mb-0">
                 <li class="nav-item"><a class="nav-link small py-0" href="/privacy_policy">Privacy Policy</a></li>
-                <li class="nav-item"><a class="nav-link small py-0 pe-0" href="{{ url('/admin_login') }}">Admin Login</a></li>
+                <!-- <li class="nav-item"><a class="nav-link small py-0 pe-0" href="{{ url('/admin_login') }}">Admin Login</a></li> -->
             </ul>
         </div>
 

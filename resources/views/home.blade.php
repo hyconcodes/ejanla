@@ -101,7 +101,7 @@ Hero START -->
                             </p>
 
                             <!-- Buttons -->
-                            <a href="#" class="btn btn-secondary icon-link icon-link-hover">Join Our Events! <i class="bi bi-arrow-right"></i></a>
+                            <a href="" data-bs-toggle="modal" data-bs-target="#subscribeModal" class="btn btn-secondary icon-link icon-link-hover">Join Our Events! <i class="bi bi-arrow-right"></i></a>
                         </div>
                     </div>
 
@@ -635,7 +635,7 @@ Blog END -->
                             <label for="subscriberEmail" class="form-label">Email address</label>
                             <input type="email" class="form-control" id="subscriberEmail" placeholder="name@example.com" required>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100">Subscribe</button>
+                        <button id="buttonText" type="submit" class="btn btn-primary w-100">Subscribe</button>
                     </form>
                     <div id="subscribeMessage" class="mt-3" style="display:none;"></div>
                 </div>
@@ -646,26 +646,50 @@ Blog END -->
     <!-- JS to show modal on page load and handle form -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Show modal on page load
             const subscribeModal = new bootstrap.Modal(document.getElementById('subscribeModal'));
             subscribeModal.show();
 
-            // Form submit handler (simple example)
-            document.getElementById('subscribeForm').addEventListener('submit', function(e) {
+            document.getElementById('subscribeForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
                 const emailInput = document.getElementById('subscriberEmail');
                 const messageDiv = document.getElementById('subscribeMessage');
+                const submitButton = this.querySelector('button[type="submit"]');
 
-                // Simple validation already done by "required" attribute
                 const email = emailInput.value.trim();
 
-                // TODO: Add your own AJAX or API call here to save email to your database/mail list
+                submitButton.disabled = true;
+                submitButton.textContent = 'Subscribing...';
+                try {
+                    const response = await fetch('/api/members_subscription', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email
+                        }),
+                    });
 
-                messageDiv.style.display = 'block';
-                messageDiv.className = 'alert alert-success';
-                messageDiv.textContent = `Thanks for subscribing with ${email}!`;
+                    const result = await response.json();
 
-                // Reset form & optionally hide modal after delay
+                    if (response.ok) {
+                        messageDiv.style.display = 'block';
+                        messageDiv.className = 'alert alert-success';
+                        messageDiv.textContent = result.message;
+                    } else {
+                        messageDiv.style.display = 'block';
+                        messageDiv.className = 'alert alert-danger';
+                        messageDiv.textContent = result.message || 'An error occurred!';
+                    }
+                } catch (error) {
+                    messageDiv.style.display = 'block';
+                    messageDiv.className = 'alert alert-danger';
+                    messageDiv.textContent = `An error occurred: ${error.message}`;
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Subscribe';
+                }
                 this.reset();
 
                 setTimeout(() => {
@@ -675,6 +699,7 @@ Blog END -->
             });
         });
     </script>
+
 </body>
 
 </html>
