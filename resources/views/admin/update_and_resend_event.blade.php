@@ -76,7 +76,7 @@ Hero START -->
                     <div class="col-lg-5 ms-auto">
                         <p class="mb-0">Update your event details below. After updating, all subscribed members will be renotified via email to ensure they have the latest information about your event!</p>
                         <!-- Subscription -->
-                        
+
                     </div>
 
                 </div>
@@ -88,7 +88,6 @@ Hero START -->
         </section>
         <!-- =======================
 Hero END -->
-
         <!-- =======================
 Blog list and sidebar START -->
         <section>
@@ -97,7 +96,16 @@ Blog list and sidebar START -->
                     <!-- Blog list START -->
                     <div class="col-xl-8 mb-5 mb-xl-0">
                         <!-- Title -->
-                        <h4 class="mb-4">Update and re-notify...</h4>
+                        <div class="d-flex justify-content-between">
+                            <h4 class="mb-4">Update and Re-notify members</h4>
+                            <form action="{{ url('delete_event/' . $event->id) }}" method="POST" onsubmit="return confirm('Note: all members we get a notification that this event has been cancel, You can always update this event, Are you sure you want to delete this event?');" style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="ms-7 btn btn-sm btn-danger" title="Delete Event">
+                                    Delete this event
+                                </button>
+                            </form>
+                        </div>
 
                         <form class="modal-body p-4" method="POST" action="{{ url('update_and_resend_event/' . $event->id) }}" enctype="multipart/form-data">
                             @csrf
@@ -143,15 +151,16 @@ Blog list and sidebar START -->
                                 <label class="form-label heading-color" for="eventFlyer">Flyer</label>
                                 <input class="form-control" type="file" id="eventFlyer" name="flyer" accept="image/*">
                                 @if(!empty($event->flyer))
-                                    <div class="mt-2">
-                                        <img class="rounded-2" src="{{ asset('storage/' . $event->flyer) }}" alt="Current Flyer" style="max-width: 200px;">
-                                    </div>
+                                <div class="mt-2">
+                                    <img class="rounded-2" src="{{ asset('storage/' . $event->flyer) }}" alt="Current Flyer" style="max-width: 200px;">
+                                </div>
                                 @endif
                             </div>
                             <!-- Buttons -->
                             <div class="d-flex justify-content-between mt-4">
-                                <button type="submit" class="btn btn-primary">Create Event</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Update Event</button>
+                                <!-- <button type="button" class="btn btn-danger">Delete</button> -->
+
                             </div>
                         </form>
                     </div>

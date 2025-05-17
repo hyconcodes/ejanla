@@ -78,9 +78,9 @@ Hero START -->
                         <!-- Subscription -->
                         <div class="bg-body rounded-pill position-relative z-index-2 p-1 mt-4">
                             <form class="input-group align-items-center" method="GET" action="{{ url('search_events') }}">
-                                <input 
-                                    class="form-control bg-transparent border-0 me-1" 
-                                    type="text" 
+                                <input
+                                    class="form-control bg-transparent border-0 me-1"
+                                    type="text"
                                     name="search"
                                     value="{{ request('search') }}"
                                     placeholder="Search events...">

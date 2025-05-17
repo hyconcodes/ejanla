@@ -57,3 +57,4 @@ Route::get('/update_and_resend_event/{id}', function($id){
     ]);
 });
 Route::put('/update_and_resend_event/{id}', [AdminController::class, 'update_and_resend_event']);
+Route::delete('/delete_event/{id}', [AdminController::class, 'delete_event']);

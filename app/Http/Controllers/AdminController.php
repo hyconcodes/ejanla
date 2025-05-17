@@ -161,4 +161,31 @@ class AdminController extends Controller
 
         return redirect('/admin_events')->with('success', 'Event updated and notifications resent.');
     }
+
+    public function delete_event($id)
+    {
+        $event = Event::findOrFail($id);
+        // Delete flyer if exists
+        if ($event->flyer) {
+            Storage::disk('public')->delete($event->flyer);
+        }
+        $eventTitle = $event->title;
+        $event->delete();
+
+        // Notify all members about event cancellation
+        Member::chunk(100, function ($members) use ($eventTitle) {
+            foreach ($members as $member) {
+                try {
+                    Mail::send('emails.event_cancellation', ['eventTitle' => $eventTitle], function ($message) use ($member, $eventTitle) {
+                        $message->to($member->email)
+                            ->subject('Event Cancelled: ' . $eventTitle);
+                    });
+                } catch (\Exception $e) {
+                    Log::error('Failed to send event cancellation email to ' . $member->email . ': ' . $e->getMessage());
+                }
+            }
+        });
+
+        return redirect('/admin_events')->with('success', 'Event deleted and cancellation notifications sent.');
+    }
 }
